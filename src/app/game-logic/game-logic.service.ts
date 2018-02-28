@@ -25,7 +25,7 @@ export class GameLogicService {
   }
 
   getTimeTaken(){
-    return (new Date().getSeconds() - this.time.getSeconds());
+    return (this.time);
 
   }
   startGame() {
@@ -55,11 +55,14 @@ export class GameLogicService {
   }
 
 
-  endTurn(): GamePlayer {
-    this.GetGamePlayer().selectedRow = -1;
-    this.turn = this.turn === GamePlayer.PLAYER ?
-      GamePlayer.BOT : GamePlayer.PLAYER;
-    this.time = new Date();
+  endTurn(turn: GamePlayer): GamePlayer {
+    if(this.isTurn(turn)){
+      this.GetGamePlayer().selectedRow = -1;
+      this.turn = this.turn === GamePlayer.PLAYER ?
+        GamePlayer.BOT : GamePlayer.PLAYER;
+      this.time = new Date();
+    }
+
     return this.turn;
   }
 

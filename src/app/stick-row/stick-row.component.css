@@ -1,4 +1,11 @@
 .stickRow{
     width: fit-content;
+    min-height: 60px;
     margin: 0 auto;
+}
+
+.chooseBtn{
+    position:absolute;
+    right: 5px;
+    margin-top: 5px;
 }

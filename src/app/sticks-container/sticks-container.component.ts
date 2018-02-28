@@ -10,7 +10,7 @@ import { GamePlayer } from '../model/game-player.enum';
 export class SticksContainerComponent implements OnInit {
   sticks: Stick[][]
   turn: GamePlayer;
-  date: Number;
+  date: Date;
   constructor(private gameLogic: GameLogicService, private cdr: ChangeDetectorRef) {
     this.initializeGame();
     this.getTimeTaken();
@@ -28,7 +28,7 @@ export class SticksContainerComponent implements OnInit {
   }
 
   endTurn() {
-    this.gameLogic.endTurn();
+    this.gameLogic.endTurn(this.turn);
   }
 
   restartGame() {
