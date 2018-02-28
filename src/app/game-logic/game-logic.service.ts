@@ -24,7 +24,7 @@ export class GameLogicService {
     ]
   }
 
-  getTimeTaken(){
+  getTimeTaken() {
     return (this.time);
 
   }
@@ -56,13 +56,19 @@ export class GameLogicService {
 
 
   endTurn(turn: GamePlayer): GamePlayer {
-    if(this.isTurn(turn)){
+    if(this.GetGamePlayer().selectedRow === -1){
+      console.log("Not allowed to end turn");
+      return this.turn;
+    }
+    if (this.isTurn(turn)) {
       this.GetGamePlayer().selectedRow = -1;
       this.turn = this.turn === GamePlayer.PLAYER ?
         GamePlayer.BOT : GamePlayer.PLAYER;
       this.time = new Date();
+      if (this.turn === GamePlayer.BOT) {
+        this.BotTurn();
+      }
     }
-
     return this.turn;
   }
 
@@ -84,6 +90,20 @@ export class GameLogicService {
       this.sticks[rowId].pop();
       this.GetGamePlayer().selectedRow = rowId;
     }
+
+  }
+
+  BotTurn() {
+    let random = -1;
+    do {
+      random = Math.floor(Math.random() * this.sticks.length);
+    } while (this.sticks[random].length <= 0);
+    let randomSticks = Math.floor(Math.random() * this.sticks[random].length) + 1;
+    for (let i = 0; i < randomSticks; i++) {
+      this.SelectRow(GamePlayer.BOT, random);
+    }
+
+    this.endTurn(GamePlayer.BOT);
 
   }
 
