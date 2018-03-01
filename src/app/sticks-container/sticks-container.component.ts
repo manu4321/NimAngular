@@ -28,6 +28,7 @@ export class SticksContainerComponent implements OnInit {
   }
 
   endTurn() {
+    console.log("inside component");
     this.gameLogic.endTurn(this.turn);
   }
 

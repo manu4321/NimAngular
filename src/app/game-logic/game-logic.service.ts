@@ -8,6 +8,7 @@ export class GameLogicService {
   players: Game[];
   turn: GamePlayer;
   time: Date
+  numberOfSticks: number = 0;
   private sticks: Stick[][];
 
   constructor() {
@@ -54,9 +55,17 @@ export class GameLogicService {
     }
   }
 
+  GetOppositePlayer() {
+    if (this.turn === GamePlayer.PLAYER) {
+      return this.players[1];
+    } else {
+      return this.players[0];
+    }
+  }
+
 
   endTurn(turn: GamePlayer): GamePlayer {
-    if(this.GetGamePlayer().selectedRow === -1){
+    if (this.GetGamePlayer().selectedRow === -1) {
       console.log("Not allowed to end turn");
       return this.turn;
     }
@@ -65,7 +74,7 @@ export class GameLogicService {
       this.turn = this.turn === GamePlayer.PLAYER ?
         GamePlayer.BOT : GamePlayer.PLAYER;
       this.time = new Date();
-      if (this.turn === GamePlayer.BOT) {
+      if (this.turn === GamePlayer.BOT && !this.isEndGame()) {
         this.BotTurn();
       }
     }
@@ -79,21 +88,37 @@ export class GameLogicService {
       this.sticks[i] = [];
       for (let j = 0; j < count; j++) {
         this.sticks[i][j] = new Stick();
+        this.numberOfSticks++;
       }
       count += 2;
     }
   }
-
+  isEndGame() {
+    return this.numberOfSticks <= 0;
+  }
   SelectRow(turn: GamePlayer, rowId) {
+
     if (this.isTurn(turn) && this.isAllowedRow(rowId)) {
       let length = this.sticks[rowId].length - 1;
       this.sticks[rowId].pop();
+      this.numberOfSticks--;
       this.GetGamePlayer().selectedRow = rowId;
     }
 
-  }
+    if (this.isEndGame()) {
+      this.endGame();
+    }
 
+  }
+  endGame() {
+    console.log("in end game");
+    this.endTurn(this.turn);
+    console.log("Winner is: " + this.GetGamePlayer().name);
+  }
   BotTurn() {
+    if (this.endGame()) {
+      return;
+    }
     let random = -1;
     do {
       random = Math.floor(Math.random() * this.sticks.length);
@@ -102,7 +127,6 @@ export class GameLogicService {
     for (let i = 0; i < randomSticks; i++) {
       this.SelectRow(GamePlayer.BOT, random);
     }
-
     this.endTurn(GamePlayer.BOT);
 
   }

@@ -3,7 +3,7 @@ export class Stick {
     private show: boolean;
 
     constructor(){
-        this.icon = "/assets/images/sticks.png";
+        //this.icon = "/assets/images/sticks.png";
         this.show = true;
     }
 
