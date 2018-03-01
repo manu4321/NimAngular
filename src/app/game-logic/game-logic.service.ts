@@ -116,7 +116,7 @@ export class GameLogicService {
     console.log("Winner is: " + this.GetGamePlayer().name);
   }
   BotTurn() {
-    if (this.endGame()) {
+    if (this.isEndGame()) {
       return;
     }
     let random = -1;
